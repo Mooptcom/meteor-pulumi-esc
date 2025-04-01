@@ -1,0 +1,14 @@
+# Value
+```json
+"[secret]"
+```
+# Definition
+```yaml
+fn::secret:
+  ciphertext: ZXNjeAAAAAEAAAEAA9JEMGnQuWoTJsX9+pBIXo94YgEBV+ZVv+SsQsRiROyHDjNTLKeB50BkrRKAY51z8XLIr1/WDHIb3rxI3R0oF5QvVwtxzRdXVRJEAZg8HR2/+UWzeX7mPunes4kIVcLE3Wbs8+sVNibrGg2uoBShN5w0C/xn5C+aqaEEMFUpZ+KskXohXDzE80KQtK8N
+
+```
+
+# Defined at
+- <project>/<yaml>:3:5
+
