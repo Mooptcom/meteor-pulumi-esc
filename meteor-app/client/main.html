@@ -47,21 +47,5 @@
         <a href="#" class="upvote">⬆ Upvote</a>
       </p>
     </div>
-    
-    <div class="comments">
-      <h4>Comments</h4>
-      {{#each commentsForPost}}
-        <div class="comment">
-          <p>{{text}} - by {{author}}</p>
-        </div>
-      {{/each}}
-      
-      {{#if currentUser}}
-        <form class="comment-form">
-          <textarea name="text" placeholder="Add your comment..."></textarea>
-          <button type="submit">Add Comment</button>
-        </form>
-      {{/if}}
-    </div>
   </div>
 </template>

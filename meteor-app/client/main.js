@@ -38,22 +38,6 @@ Template.postItem.events({
     event.preventDefault();
     Meteor.call('posts.upvote', this._id);
   },
-  
-  'submit .comment-form'(event, template) {
-    event.preventDefault();
-    
-    const text = event.target.text.value;
-    
-    if (text.trim()) {
-      Meteor.call('comments.insert', this._id, text, (error) => {
-        if (error) {
-          console.error("Error adding comment:", error);
-        } else {
-          event.target.text.value = '';
-        }
-      });
-    }
-  }
 });
 
 // Post submit template
