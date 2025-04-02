@@ -1,6 +1,5 @@
 node_modules
 .pulumi
 Pulumi.*.yaml
-*.json
 .DS_Store
 meteor-app/.meteor/local
