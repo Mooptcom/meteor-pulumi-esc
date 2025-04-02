@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 export const Posts = new Mongo.Collection('posts');
-export const Comments = new Mongo.Collection('comments');
 
 // Define security rules if not using autopublish
 if (Meteor.isServer) {

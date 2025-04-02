@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { Posts, Comments } from '../imports/api/collections.js';
+import { Posts } from '../imports/api/collections.js';
 import './main.html';
 
 // Subscribe to data
@@ -21,16 +21,7 @@ Template.postItem.onCreated(function() {
   // Use the data context's _id, not this._id
   this.autorun(() => {
     const data = Template.currentData();
-    if (data && data._id) {
-      this.subscribe('comments', data._id);
-    }
   });
-});
-
-Template.postItem.helpers({
-  commentsForPost() {
-    return Comments.find({postId: this._id}, {sort: {createdAt: -1}});
-  }
 });
 
 Template.postItem.events({
