@@ -25,5 +25,6 @@ hot-module-replacement@0.5.4  # Update code in development without reloading the
 blaze-hot               # Update files using Blaze's API with HMR
 accounts-password
 accounts-ui
+check
 autopublish
 insecure
