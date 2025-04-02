@@ -28,12 +28,12 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
     
-    const user = Meteor.users.findOne(this.userId);
+    const user = Meteor.users.findOneAsync(this.userId);
     const username = user && user.username ? user.username : 
                     (user && user.profile && user.profile.name ? user.profile.name : 
                     (user && user.emails ? user.emails[0].address : 'Anonymous'));
     
-    return Posts.insert({
+    return Posts.insertAsync({
       title,
       url,
       createdAt: new Date(),
@@ -50,7 +50,7 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
     
-    Posts.update(postId, {$inc: {votes: 1}});
+    Posts.updateAsync(postId, {$inc: {votes: 1}});
   },
   
   'comments.insert'(postId, text) {
@@ -61,12 +61,12 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
     
-    const user = Meteor.users.findOne(this.userId);
+    const user = Meteor.users.findOneAsync(this.userId);
     const username = user && user.username ? user.username : 
                     (user && user.profile && user.profile.name ? user.profile.name : 
                     (user && user.emails ? user.emails[0].address : 'Anonymous'));
     
-    return Comments.insert({
+    return Comments.insertAsync({
       postId,
       text,
       createdAt: new Date(),
