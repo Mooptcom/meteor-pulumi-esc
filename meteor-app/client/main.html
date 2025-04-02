@@ -1,25 +1,67 @@
 <head>
-  <title>Meteor App</title>
+  <title>Mini Reddit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-  {{> info}}
+  {{> main}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="main">
+  <div class="container">
+    <header>
+      <h1>Mini Reddit</h1>
+      <div class="login">{{> loginButtons}}</div>
+      {{#if currentUser}}
+        {{> postSubmit}}
+      {{/if}}
+    </header>
+    
+    <div class="posts">
+      {{> postsList}}
+    </div>
+  </div>
 </template>
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+<template name="postSubmit">
+  <form class="post-submit">
+    <input type="text" name="title" placeholder="Title" required>
+    <input type="url" name="url" placeholder="URL" required>
+    <button type="submit">Submit</button>
+  </form>
+</template>
+
+<template name="postsList">
+  {{#each posts}}
+    {{> postItem}}
+  {{/each}}
+</template>
+
+<template name="postItem">
+  <div class="post">
+    <div class="post-content">
+      <h3><a href="{{url}}" target="_blank">{{title}}</a></h3>
+      <p>
+        {{votes}} votes, 
+        submitted by {{author}}
+        <a href="#" class="upvote">⬆ Upvote</a>
+      </p>
+    </div>
+    
+    <div class="comments">
+      <h4>Comments</h4>
+      {{#each commentsForPost}}
+        <div class="comment">
+          <p>{{text}} - by {{author}}</p>
+        </div>
+      {{/each}}
+      
+      {{#if currentUser}}
+        <form class="comment-form">
+          <textarea name="text" placeholder="Add your comment..."></textarea>
+          <button type="submit">Add Comment</button>
+        </form>
+      {{/if}}
+    </div>
+  </div>
 </template>
