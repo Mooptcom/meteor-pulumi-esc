@@ -1,22 +1,64 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
-
+import { Posts, Comments } from '../imports/api/collections.js';
 import './main.html';
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
+// Subscribe to data
+Meteor.startup(() => {
+  Meteor.subscribe('allPosts');
 });
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
+// Post list template
+Template.postsList.helpers({
+  posts() {
+    return Posts.find({}, {sort: {votes: -1, createdAt: -1}});
+  }
 });
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
+// Post item template
+Template.postItem.onCreated(function() {
+  this.autorun(() => {
+    this.subscribe('comments', this._id);
+  });
+});
+
+Template.postItem.helpers({
+  commentsForPost() {
+    return Comments.find({postId: this._id}, {sort: {createdAt: -1}});
+  }
+});
+
+Template.postItem.events({
+  'click .upvote'(event, template) {
+    event.preventDefault();
+    Meteor.call('posts.upvote', this._id);
   },
+  
+  'submit .comment-form'(event, template) {
+    event.preventDefault();
+    
+    const text = event.target.text.value;
+    
+    if (text.trim()) {
+      Meteor.call('comments.insert', this._id, text);
+      event.target.text.value = '';
+    }
+  }
+});
+
+// Post submit template
+Template.postSubmit.events({
+  'submit .post-submit'(event, template) {
+    event.preventDefault();
+    
+    const title = event.target.title.value;
+    const url = event.target.url.value;
+    
+    Meteor.call('posts.insert', title, url);
+    
+    // Clear form
+    event.target.title.value = '';
+    event.target.url.value = '';
+  }
 });
