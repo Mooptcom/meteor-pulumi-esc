@@ -1,4 +1,6 @@
 import { Mongo } from 'meteor/mongo';
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 export const Posts = new Mongo.Collection('posts');
 export const Comments = new Mongo.Collection('comments');
@@ -11,6 +13,7 @@ if (Meteor.isServer) {
   });
   
   Meteor.publish('comments', function(postId) {
+    check(postId, String);
     return Comments.find({postId: postId});
   });
 }
@@ -18,21 +21,31 @@ if (Meteor.isServer) {
 // Methods
 Meteor.methods({
   'posts.insert'(title, url) {
+    check(title, String);
+    check(url, String);
+    
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
     
-    Posts.insert({
+    const user = Meteor.users.findOne(this.userId);
+    const username = user && user.username ? user.username : 
+                    (user && user.profile && user.profile.name ? user.profile.name : 
+                    (user && user.emails ? user.emails[0].address : 'Anonymous'));
+    
+    return Posts.insert({
       title,
       url,
       createdAt: new Date(),
       userId: this.userId,
-      author: Meteor.users.findOne(this.userId).username,
+      author: username,
       votes: 0
     });
   },
   
   'posts.upvote'(postId) {
+    check(postId, String);
+    
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -41,16 +54,24 @@ Meteor.methods({
   },
   
   'comments.insert'(postId, text) {
+    check(postId, String);
+    check(text, String);
+    
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
     
-    Comments.insert({
+    const user = Meteor.users.findOne(this.userId);
+    const username = user && user.username ? user.username : 
+                    (user && user.profile && user.profile.name ? user.profile.name : 
+                    (user && user.emails ? user.emails[0].address : 'Anonymous'));
+    
+    return Comments.insert({
       postId,
       text,
       createdAt: new Date(),
       userId: this.userId,
-      author: Meteor.users.findOne(this.userId).username
+      author: username
     });
   }
 });
