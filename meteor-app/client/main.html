@@ -44,7 +44,7 @@
       <p>
         {{votes}} votes, 
         submitted by {{author}}
-        <a href="#" class="upvote">⬆ Upvote</a>
+        {{#if currentUser}}<a href="#" class="upvote">⬆ Upvote</a>{{/if}}
       </p>
     </div>
   </div>
