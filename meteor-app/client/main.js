@@ -18,8 +18,12 @@ Template.postsList.helpers({
 
 // Post item template
 Template.postItem.onCreated(function() {
+  // Use the data context's _id, not this._id
   this.autorun(() => {
-    this.subscribe('comments', this._id);
+    const data = Template.currentData();
+    if (data && data._id) {
+      this.subscribe('comments', data._id);
+    }
   });
 });
 
@@ -41,8 +45,13 @@ Template.postItem.events({
     const text = event.target.text.value;
     
     if (text.trim()) {
-      Meteor.call('comments.insert', this._id, text);
-      event.target.text.value = '';
+      Meteor.call('comments.insert', this._id, text, (error) => {
+        if (error) {
+          console.error("Error adding comment:", error);
+        } else {
+          event.target.text.value = '';
+        }
+      });
     }
   }
 });
@@ -55,10 +64,14 @@ Template.postSubmit.events({
     const title = event.target.title.value;
     const url = event.target.url.value;
     
-    Meteor.call('posts.insert', title, url);
-    
-    // Clear form
-    event.target.title.value = '';
-    event.target.url.value = '';
+    Meteor.call('posts.insert', title, url, (error) => {
+      if (error) {
+        console.error("Error adding post:", error);
+      } else {
+        // Clear form
+        event.target.title.value = '';
+        event.target.url.value = '';
+      }
+    });
   }
 });
