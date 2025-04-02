@@ -9,7 +9,7 @@ export const Comments = new Mongo.Collection('comments');
 if (Meteor.isServer) {
   // Publications
   Meteor.publish('allPosts', function() {
-    return Posts.findAsync({}, {sort: {votes: -1, createdAt: -1}});
+    return Posts.find({}, {sort: {votes: -1, createdAt: -1}});
   });
 }
 
